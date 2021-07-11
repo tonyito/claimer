@@ -1,0 +1,11 @@
+{
+  "name": "claim-rest",
+  "version": "1.0.0",
+  "description": "Claim Project REST Service",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Tony Ito-Cole",
+  "license": "ISC"
+}
