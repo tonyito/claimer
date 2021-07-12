@@ -1,2 +1,2 @@
-# claim
-Claim Project Repository
+# claimer
+Claimer Project Repository
