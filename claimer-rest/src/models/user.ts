@@ -1,17 +1,19 @@
+import { nanoid } from "nanoid";
+
 export default class User {
-  id: string;
-  username: string;
-  firstName: string;
-  lastName: string;
-  email: string;
+  public id: string;
+  public username: string;
+  public firstName: string | null;
+  public lastName: string | null;
+  public email: string;
   constructor(
-    id: string,
     username: string,
-    firstName: string,
-    lastName: string,
-    email: string
+    firstName: string | null,
+    lastName: string | null,
+    email: string,
+    id?: string
   ) {
-    this.id = id;
+    this.id = id || nanoid(8);
     this.username = username;
     this.firstName = firstName;
     this.lastName = lastName;

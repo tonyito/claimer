@@ -1,8 +1,11 @@
 import { Router } from "express";
 
 import AuthenticationController from "../controllers/authenticationController";
+import UserController from "../controllers/userController";
 
-const { signIn, verifySession } = AuthenticationController;
+const { signUp, signIn, createSession, verifySession } =
+  AuthenticationController;
+const { addUser } = UserController;
 
 const router = Router();
 
@@ -12,7 +15,23 @@ class AuthenticationRoutes {
   constructor() {
     this.authenticationRoutes = router;
 
-    this.authenticationRoutes.post("/signin", signIn);
+    this.authenticationRoutes.post(
+      "/signin",
+      signIn,
+      createSession,
+      (req, res) => {
+        res.send("Login successful.");
+      }
+    );
+    this.authenticationRoutes.post(
+      "/signup",
+      signUp,
+      addUser,
+      createSession,
+      (req, res) => {
+        res.send("Registration successful.");
+      }
+    );
 
     this.authenticationRoutes.get("/verifySession", verifySession, (req, res) =>
       res.send(res.locals)
