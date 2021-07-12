@@ -2,7 +2,7 @@ import { Router } from "express";
 
 import AuthenticationController from "../controllers/authenticationController";
 
-const { signIn } = AuthenticationController;
+const { signIn, verifySession } = AuthenticationController;
 
 const router = Router();
 
@@ -13,6 +13,10 @@ class AuthenticationRoutes {
     this.authenticationRoutes = router;
 
     this.authenticationRoutes.post("/signin", signIn);
+
+    this.authenticationRoutes.get("/verifySession", verifySession, (req, res) =>
+      res.send(res.locals)
+    );
   }
 }
 

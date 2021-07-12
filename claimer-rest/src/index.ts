@@ -18,8 +18,6 @@ const { userRoutes } = UserRoutes;
 const { authenticationRoutes } = AuthenticationRoutes;
 const { checkCSRFToken } = MainController;
 
-const csrfMiddleware = csrf({ cookie: true });
-
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount as admin.ServiceAccount), //casting required for ES6 import syntax
   databaseURL: "https://project-b-538a4-default-rtdb.firebaseio.com",
@@ -30,7 +28,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(cookieParser());
-app.use(csrfMiddleware);
+app.use(csrf({ cookie: true }));
 
 app.use(checkCSRFToken);
 

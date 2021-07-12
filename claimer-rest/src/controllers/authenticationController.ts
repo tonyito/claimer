@@ -16,12 +16,12 @@ export default class AuthenticationController {
     next: NextFunction
   ) => {
     try {
-      const username = req.body.username;
+      const email = req.body.email;
       const password = req.body.password;
 
       const authenticationResult = await firebase
         .auth()
-        .signInWithEmailAndPassword(username, password);
+        .signInWithEmailAndPassword(email, password);
       const { user } = authenticationResult;
       const idToken = await user?.getIdToken();
       if (idToken) {
@@ -32,6 +32,26 @@ export default class AuthenticationController {
         res.cookie("session", sessionCookie, options);
         res.send("Login Successful");
       }
+    } catch (error) {
+      res.status(401).send(error.message);
+    }
+  };
+  public static verifySession = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const sessionCookie = req.cookies.session || "";
+      const sessionVerification = await admin
+        .auth()
+        .verifySessionCookie(sessionCookie, true);
+      const { email } = sessionVerification;
+      if (email) {
+        res.locals.email = email;
+        next();
+      }
+      next();
     } catch (error) {
       res.status(401).send(error.message);
     }
