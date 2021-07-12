@@ -9,13 +9,13 @@ var addUser = userController_1.default.addUser, getUser = userController_1.defau
 var router = express_1.Router();
 var UserRoutes = /** @class */ (function () {
     function UserRoutes() {
-        this.routes = router;
+        this.userRoutes = router;
         /* Get all users*/
-        this.routes.get("/", getAllUsers);
+        this.userRoutes.get("/", getAllUsers);
         /** Get user by username */
-        this.routes.get("/:username", getUser);
+        this.userRoutes.get("/:username", getUser);
         /** Create new user */
-        this.routes.post("/", addUser);
+        this.userRoutes.post("/", addUser);
     }
     return UserRoutes;
 }());
