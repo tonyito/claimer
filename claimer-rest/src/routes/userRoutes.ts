@@ -1,8 +1,10 @@
 import { Router } from "express";
+import AuthenticationController from "../controllers/authenticationController";
 
 import UserController from "../controllers/userController";
 
-const { addUser, getUser, getAllUsers } = UserController;
+const { addUser, getUser, getAllUsers, patchUser } = UserController;
+const { verifySession } = AuthenticationController;
 
 const router = Router();
 
@@ -11,12 +13,13 @@ class UserRoutes {
 
   constructor() {
     this.userRoutes = router;
-    /* Get all users*/
+
     this.userRoutes.get("/", getAllUsers);
-    /** Get user by username */
     this.userRoutes.get("/:username", getUser);
-    /** Create new user */
+
     this.userRoutes.post("/", addUser);
+
+    this.userRoutes.patch("/:username", verifySession, patchUser);
   }
 }
 

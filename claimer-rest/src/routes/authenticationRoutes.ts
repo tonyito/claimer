@@ -3,7 +3,7 @@ import { Router } from "express";
 import AuthenticationController from "../controllers/authenticationController";
 import UserController from "../controllers/userController";
 
-const { signUp, signIn, createSession, verifySession } =
+const { signUp, signIn, signOut, createSession, verifySession, endSession } =
   AuthenticationController;
 const { addUser } = UserController;
 
@@ -21,6 +21,14 @@ class AuthenticationRoutes {
       createSession,
       (req, res) => {
         res.send("Login successful.");
+      }
+    );
+    this.authenticationRoutes.post(
+      "/signout",
+      signOut,
+      endSession,
+      (req, res) => {
+        res.send("Logout successful.");
       }
     );
     this.authenticationRoutes.post(

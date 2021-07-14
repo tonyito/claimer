@@ -1,25 +1,27 @@
 import { NextFunction, Request, Response } from "express";
-import admin from "firebase-admin";
 import firebase from "firebase";
+import admin from "firebase-admin";
 
-import Authentication, { SignUpData } from "../models/authentication";
 import AuthenticationConstants from "../constants/authenticationConstants";
 import UserCollectionQueries from "../firebase/queries/userQueries";
+import Authentication, { SignUpData } from "../models/authentication";
 import ObjectHelpers from "../utils/helpers/objectHelpers";
+import UserControllerHelpers from "./helpers/userControllerHelpers";
 
 const { FIVE_DAYS } = AuthenticationConstants;
 
+const { convertFirebaseUserToRESTUser } = UserControllerHelpers;
 const { findOneUserByEmail, findOneUserByUsername } = UserCollectionQueries;
 const { findMissingKeys } = ObjectHelpers;
 
 firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
 
 export default class AuthenticationController {
-  public static signUp = async (
+  public static async signUp(
     req: Request<null, null, SignUpData>,
     res: Response,
     next: NextFunction
-  ) => {
+  ): Promise<void> {
     try {
       const email = req.body.email;
       const password = req.body.password;
@@ -57,17 +59,25 @@ export default class AuthenticationController {
     } catch (error) {
       res.status(400).send(error.message);
     }
-  };
+  }
 
-  public static signIn = async (
+  public static async signIn(
     req: Request<null, null, Authentication>,
     res: Response,
     next: NextFunction
-  ) => {
+  ): Promise<void> {
     try {
-      const email = req.body.email;
+      let email: string = req.body.email;
       const password = req.body.password;
-
+      const foundEmail = await findOneUserByEmail(email);
+      if (foundEmail.empty) {
+        const foundUser = await findOneUserByUsername(email);
+        if (foundUser.empty) {
+          res.status(404).send("Email/Username not found in system.");
+        } else {
+          email = convertFirebaseUserToRESTUser(foundUser)[0].email;
+        }
+      }
       const authenticationResult = await firebase
         .auth()
         .signInWithEmailAndPassword(email, password);
@@ -78,13 +88,26 @@ export default class AuthenticationController {
     } catch (error) {
       res.status(401).send(error.message);
     }
-  };
+  }
 
-  public static createSession = async (
+  public static async signOut(
+    req: Request<Record<string, string>>,
+    res: Response<any, { email: string }>,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      await firebase.auth().signOut();
+      next();
+    } catch (error) {
+      res.status(401).send(error.message);
+    }
+  }
+
+  public static async createSession(
     req: Request<null, null, Authentication | SignUpData>,
     res: Response<any, { idToken: string | undefined }>,
     next: NextFunction
-  ) => {
+  ): Promise<void> {
     try {
       const idToken = res.locals.idToken;
       if (idToken) {
@@ -98,13 +121,13 @@ export default class AuthenticationController {
     } catch (error) {
       res.status(401).send(error.message);
     }
-  };
+  }
 
-  public static verifySession = async (
+  public static async verifySession(
     req: Request,
     res: Response,
     next: NextFunction
-  ) => {
+  ): Promise<void> {
     try {
       const sessionCookie = req.cookies.session || "";
       const sessionVerification = await admin
@@ -114,10 +137,24 @@ export default class AuthenticationController {
       if (email) {
         res.locals.email = email;
         next();
+      } else {
+        next();
       }
+    } catch (error) {
+      res.status(401).send(error.message);
+    }
+  }
+
+  public static async endSession(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      res.clearCookie("session");
       next();
     } catch (error) {
       res.status(401).send(error.message);
     }
-  };
+  }
 }

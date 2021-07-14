@@ -1,17 +1,14 @@
-import express from "express";
-import csrf from "csurf";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import csrf from "csurf";
+import express from "express";
 import admin from "firebase-admin";
 
-import config from "./config/config";
-
-import UserRoutes from "./routes/userRoutes";
-import AuthenticationRoutes from "./routes/authenticationRoutes";
-
-import MainController from "./controllers/mainController";
-
 import serviceAccount from "../serviceAccountKey.json";
+import config from "./config/config";
+import MainController from "./controllers/mainController";
+import AuthenticationRoutes from "./routes/authenticationRoutes";
+import UserRoutes from "./routes/userRoutes";
 
 const { port } = config;
 const { userRoutes } = UserRoutes;

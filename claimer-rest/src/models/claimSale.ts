@@ -1,9 +1,9 @@
 import { nanoid } from "nanoid";
 
 export default class ClaimSale {
-  public ID: string;
-  public userID: string;
-  public itemIDs: string[];
+  public id: string;
+  public userId: string;
+  public itemIds: string[];
   public startTime: number;
   public endTime: number;
   public interval: number;
@@ -11,17 +11,17 @@ export default class ClaimSale {
   public description: string;
 
   constructor(
-    userID: string,
-    itemIDs: string[],
+    userId: string,
+    itemIds: string[],
     startTime: number,
     endTime: number,
     interval: number,
     title: string,
     description: string
   ) {
-    this.ID = nanoid(8);
-    this.userID = userID;
-    this.itemIDs = itemIDs;
+    this.id = nanoid(8);
+    this.userId = userId;
+    this.itemIds = itemIds;
     this.startTime = startTime;
     this.endTime = endTime;
     this.interval = interval;
