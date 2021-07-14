@@ -1,6 +1,11 @@
 import { nanoid } from "nanoid";
 
+import { UserRoles } from "../constants/userConstants";
+import UserCollectionQueries from "../firebase/queries/userQueries";
+import { FoundDocument } from "../types/firebaseTypes";
 import { Roles } from "../types/userTypes";
+
+const { findOneUserByEmail } = UserCollectionQueries;
 
 export default class User {
   public id: string;
@@ -9,7 +14,7 @@ export default class User {
   public lastName: string | null;
   public email: string;
   public role: Roles;
-  private _verified: boolean;
+  public verified: boolean;
   constructor(
     username: string,
     firstName: string | null,
@@ -24,14 +29,28 @@ export default class User {
     this.lastName = lastName;
     this.role = role;
     this.email = email;
-    this._verified = false;
+    this.verified = false;
   }
 
-  get verified(): boolean {
-    return this._verified;
+  public static convertFirebaseUserToRESTUser(
+    foundUser: FoundDocument
+  ): User[] {
+    const userArr: User[] = [];
+    foundUser.forEach((user) => {
+      const { username, firstName, lastName, email, role, id } = user.data();
+      userArr.push(new User(username, firstName, lastName, email, role, id));
+    });
+    return userArr;
   }
 
-  set verified(value: boolean) {
-    this._verified = value;
+  public static async checkUserRole(email: string): Promise<number> {
+    try {
+      const userData = await findOneUserByEmail(email);
+      const currentUserRole =
+        User.convertFirebaseUserToRESTUser(userData)[0].role;
+      return UserRoles[currentUserRole];
+    } catch (error) {
+      throw new Error(error.message);
+    }
   }
 }

@@ -6,11 +6,10 @@ import UserCollectionQueries from "../firebase/queries/userQueries";
 import { SignUpData } from "../models/authentication";
 import User from "../models/user";
 import ObjectHelpers from "../utils/helpers/objectHelpers";
-import UserControllerHelpers from "./helpers/userControllerHelpers";
 
 const firestore = firebase.firestore();
 
-const { checkUserRole, convertFirebaseUserToRESTUser } = UserControllerHelpers;
+const { checkUserRole, convertFirebaseUserToRESTUser } = User;
 const { findMissingKeys } = ObjectHelpers;
 const { findOneUserByUsername } = UserCollectionQueries;
 

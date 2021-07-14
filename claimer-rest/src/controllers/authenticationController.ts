@@ -5,12 +5,12 @@ import admin from "firebase-admin";
 import AuthenticationConstants from "../constants/authenticationConstants";
 import UserCollectionQueries from "../firebase/queries/userQueries";
 import Authentication, { SignUpData } from "../models/authentication";
+import User from "../models/user";
 import ObjectHelpers from "../utils/helpers/objectHelpers";
-import UserControllerHelpers from "./helpers/userControllerHelpers";
 
 const { FIVE_DAYS } = AuthenticationConstants;
 
-const { convertFirebaseUserToRESTUser } = UserControllerHelpers;
+const { convertFirebaseUserToRESTUser } = User;
 const { findOneUserByEmail, findOneUserByUsername } = UserCollectionQueries;
 const { findMissingKeys } = ObjectHelpers;
 
