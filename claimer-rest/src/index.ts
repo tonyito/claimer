@@ -3,6 +3,7 @@ import cors from "cors";
 import csrf from "csurf";
 import express from "express";
 import admin from "firebase-admin";
+import sanitize from "sanitize";
 
 import serviceAccount from "../serviceAccountKey.json";
 import config from "./config/config";
@@ -24,6 +25,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cors());
+app.use(sanitize.middleware);
 app.use(cookieParser());
 app.use(csrf({ cookie: true }));
 
