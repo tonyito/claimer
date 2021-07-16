@@ -21,11 +21,12 @@ a {
 .flex_box_row {
   flex-direction: row;
 }
-
 .flex_end {
   justify-content: flex-end;
 }
-
+.flex_center {
+  justify-content: center;
+}
 //Positioning
 
 .margin_1vh {
@@ -39,4 +40,8 @@ a {
 //Text
 .text_light {
   color: $primary-light;
+}
+
+.ant-card-head-title {
+  color: white;
 }

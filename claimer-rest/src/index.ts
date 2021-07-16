@@ -3,7 +3,6 @@ import cors from "cors";
 import csrf from "csurf";
 import express from "express";
 import admin from "firebase-admin";
-import sanitize from "sanitize";
 
 import serviceAccount from "../serviceAccountKey.json";
 import config from "./config/config";
@@ -18,14 +17,13 @@ const { checkCSRFToken } = MainController;
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount as admin.ServiceAccount), //casting required for ES6 import syntax
-  databaseURL: "https://project-b-538a4-default-rtdb.firebaseio.com",
+  databaseURL: config.firebaseConfig.databaseURL,
 });
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
-app.use(sanitize.middleware);
 app.use(cookieParser());
 app.use(csrf({ cookie: true }));
 

@@ -1,10 +1,10 @@
 import { Button, Col, Row } from "antd";
 import classNames from "classnames";
 import Head from "next/head";
+import Link from "next/link";
 import React from "react";
+import { ChildrenProps } from "types/reactTypes";
 
-import styles from "../../styles/Home.module.scss";
-import { ChildrenProps } from "../../types/reactTypes";
 import layoutStyles from "./layoutStyles.module.scss";
 
 const Layout = ({ children }: ChildrenProps): JSX.Element => {
@@ -41,18 +41,22 @@ const Layout = ({ children }: ChildrenProps): JSX.Element => {
               >
                 Sign Up
               </Button>
-              <Button
-                className={classNames(layoutStyles.button_top_right)}
-                type="primary"
-              >
-                Log In
-              </Button>
+              <Link href={"/authentication/login"}>
+                <a>
+                  <Button
+                    className={classNames(layoutStyles.button_top_right)}
+                    type="primary"
+                  >
+                    Log In
+                  </Button>
+                </a>
+              </Link>
             </div>
           </Col>
         </Row>
       </header>
       {children}
-      <footer className={styles.footer}>
+      <footer className={layoutStyles.footer}>
         <span>Claimer Marketplace</span>
       </footer>
     </>
