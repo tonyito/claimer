@@ -1,13 +1,40 @@
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useCookies } from "react-cookie";
 import { Button, Col, Row } from "antd";
 import classNames from "classnames";
+
+import { SESSION_URL } from "lib/axios/urls/authentication";
+import { HEALTH_URL } from "lib/axios/urls/health";
+import useFetch from "lib/hooks/useFetch";
+import { setLoggedOff } from "lib/redux/appSlice";
 import Head from "next/head";
 import Link from "next/link";
-import React from "react";
 import { ChildrenProps } from "types/reactTypes";
 
 import layoutStyles from "./layoutStyles.module.scss";
 
 const Layout = ({ children }: ChildrenProps): JSX.Element => {
+  const [sessionUrl, setSessionUrl] = useState<string | undefined>(undefined);
+  const { status: healthStatus } = useFetch<string>(HEALTH_URL);
+  const { data: sessionData, error: sessionError } =
+    useFetch<string>(sessionUrl);
+  const [cookies, setCookie] = useCookies();
+  const state = useSelector((state) => state);
+  const dispatch = useDispatch();
+
+  const XSRF_TOKEN = cookies["XSRF-TOKEN"];
+
+  useEffect(() => {
+    if (healthStatus === "fetched" && XSRF_TOKEN) {
+      setSessionUrl(SESSION_URL);
+    }
+  }, [healthStatus]);
+
+  useEffect(() => {
+    if (sessionError) dispatch(setLoggedOff(null));
+  }, [sessionError]);
+
   return (
     <>
       <Head>

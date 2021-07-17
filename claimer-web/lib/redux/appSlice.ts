@@ -1,16 +1,27 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, SliceCaseReducers } from "@reduxjs/toolkit";
 
-export const appSlice = createSlice({
+type InitialState = {
+  isLoggedIn: boolean;
+  username: string | null;
+};
+
+export const appSlice = createSlice<
+  InitialState,
+  SliceCaseReducers<InitialState>,
+  string
+>({
   name: "app",
-  initialState: { dev: false },
+  initialState: { isLoggedIn: false, username: null },
   reducers: {
-    turnOnDev: (state) => {
-      state.dev = true;
+    setLoggedIn: (state, action) => {
+      state.isLoggedIn = true;
+      state.username = action.payload.username;
     },
-    turnOffDev: (state) => {
-      state.dev = false;
+    setLoggedOff: (state) => {
+      state.isLoggedIn = false;
+      state.username = null;
     },
   },
 });
 
-export const { turnOnDev, turnOffDev } = appSlice.actions;
+export const { setLoggedIn, setLoggedOff } = appSlice.actions;

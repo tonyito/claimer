@@ -21,3 +21,6 @@ export default class UserCollectionQueries {
       .get();
   }
 }
+
+export const { findOneUserByEmail, findOneUserByUsername } =
+  UserCollectionQueries;

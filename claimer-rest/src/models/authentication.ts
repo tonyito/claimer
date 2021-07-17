@@ -1,9 +1,7 @@
 import { DateTime } from "luxon";
 import { nanoid } from "nanoid";
 
-import AuthenticationConstants from "../constants/authenticationConstants";
-
-const { ONE_DAY } = AuthenticationConstants;
+import { ONE_DAY } from "../constants/authenticationConstants";
 
 export default class Authentication {
   public email: string;

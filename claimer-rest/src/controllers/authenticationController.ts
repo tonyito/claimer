@@ -2,17 +2,14 @@ import { NextFunction, Request, Response } from "express";
 import firebase from "firebase";
 import admin from "firebase-admin";
 
-import AuthenticationConstants from "../constants/authenticationConstants";
-import UserCollectionQueries from "../firebase/queries/userQueries";
+import { FIVE_DAYS } from "../constants/authenticationConstants";
+import {
+  findOneUserByEmail,
+  findOneUserByUsername,
+} from "../firebase/queries/userQueries";
 import Authentication, { SignUpData } from "../models/authentication";
-import User from "../models/user";
-import ObjectHelpers from "../utils/helpers/objectHelpers";
-
-const { FIVE_DAYS } = AuthenticationConstants;
-
-const { convertFirebaseUserToRESTUser } = User;
-const { findOneUserByEmail, findOneUserByUsername } = UserCollectionQueries;
-const { findMissingKeys } = ObjectHelpers;
+import { convertFirebaseUserToRESTUser } from "../models/user";
+import { findMissingKeys } from "../utils/helpers/objectHelpers";
 
 firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
 
@@ -158,3 +155,12 @@ export default class AuthenticationController {
     }
   }
 }
+
+export const {
+  signIn,
+  signOut,
+  signUp,
+  createSession,
+  verifySession,
+  endSession,
+} = AuthenticationController;

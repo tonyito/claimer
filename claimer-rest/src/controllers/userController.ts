@@ -2,16 +2,15 @@ import { NextFunction, Request, Response } from "express";
 import { pick } from "lodash";
 
 import firebase from "../firebase/db";
-import UserCollectionQueries from "../firebase/queries/userQueries";
+import { findOneUserByUsername } from "../firebase/queries/userQueries";
 import { SignUpData } from "../models/authentication";
-import User from "../models/user";
-import ObjectHelpers from "../utils/helpers/objectHelpers";
+import User, {
+  checkUserRole,
+  convertFirebaseUserToRESTUser,
+} from "../models/user";
+import { findMissingKeys } from "../utils/helpers/objectHelpers";
 
 const firestore = firebase.firestore();
-
-const { checkUserRole, convertFirebaseUserToRESTUser } = User;
-const { findMissingKeys } = ObjectHelpers;
-const { findOneUserByUsername } = UserCollectionQueries;
 
 export default class UserController {
   public static async addUser(
@@ -107,3 +106,5 @@ export default class UserController {
     }
   }
 }
+
+export const { addUser, getUser, getAllUsers, patchUser } = UserController;

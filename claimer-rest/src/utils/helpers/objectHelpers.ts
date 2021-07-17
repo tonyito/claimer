@@ -8,3 +8,5 @@ export default class ObjectHelpers {
     return keys.filter((key) => isNil(obj[key]));
   }
 }
+
+export const { findMissingKeys } = ObjectHelpers;

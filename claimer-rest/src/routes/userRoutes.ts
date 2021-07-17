@@ -1,10 +1,12 @@
 import { Router } from "express";
-import AuthenticationController from "../controllers/authenticationController";
 
-import UserController from "../controllers/userController";
-
-const { addUser, getUser, getAllUsers, patchUser } = UserController;
-const { verifySession } = AuthenticationController;
+import { verifySession } from "../controllers/authenticationController";
+import {
+  addUser,
+  getUser,
+  getAllUsers,
+  patchUser,
+} from "../controllers/userController";
 
 const router = Router();
 

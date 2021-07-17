@@ -1,11 +1,9 @@
 import { nanoid } from "nanoid";
 
 import { UserRoles } from "../constants/userConstants";
-import UserCollectionQueries from "../firebase/queries/userQueries";
+import { findOneUserByEmail } from "../firebase/queries/userQueries";
 import { FoundDocument } from "../types/firebaseTypes";
 import { Roles } from "../types/userTypes";
-
-const { findOneUserByEmail } = UserCollectionQueries;
 
 export default class User {
   public id: string;
@@ -54,3 +52,5 @@ export default class User {
     }
   }
 }
+
+export const { convertFirebaseUserToRESTUser, checkUserRole } = User;
